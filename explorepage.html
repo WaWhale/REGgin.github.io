@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGgin</title>
+    <style>
+        body {
+            background-image: url('explorebg.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+        header {
+            background-color: #151515;
+            color: #fff;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        header img {
+            max-width: 200px;
+            margin-right: 10px;
+            height: auto;
+        }
+        .sidebar-button {
+            cursor: pointer;
+            width: 40px;
+            height: auto;
+        }
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            right: 0;
+            background-color: #111111db;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+        .sidebar-button:hover {
+            transform: scale(1.1);
+        }
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #5ef439;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            color: #ffffff;
+        }
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        .custom-image {
+            width: 280px;
+            height: 400px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: 4px solid #000000;
+        }
+
+        .custom-image:hover {
+            transform: scale(1.1);
+        }
+
+        #imageContainer {
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(5, minmax(100px, 1fr));
+            gap: 2px;
+            padding: 30px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.911);
+            overflow: auto;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 65%;
+            transform: translate(-50%, -50%);
+            max-width: 80%;
+            max-height: 80%;
+            background-color: #000000;
+            border-radius: 3px;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .modal-img {
+            width: 100%;
+            height: auto;
+        }
+
+        .close {
+            color: #fff;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: rgb(0, 0, 0);
+            padding: 5px 10px;
+            border-radius: 50%;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: rgb(107, 237, 37);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .styled-button {
+            position: absolute;
+            top: 84%;
+            left: 63%;
+            display: inline-block;
+            padding: 20px 40px;
+            font-size: 40px;
+            background-color: #5ef439;
+            color: #161616;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .styled-button:hover {
+            transform: scale(1.1);
+        }
+
+        .floating-window {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1f1f1f;
+            padding: 30px;
+            box-shadow: 0px 0px 10px rgba(2, 255, 19, 0.182);
+            z-index: 9999;
+            display: none;
+            width: 500px;
+            height: 300px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            border-radius: 10px;
+            color: #3def34;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            display: none;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            color: #fff;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 120px;
+            left: 30px;
+            width: 80px;
+            height: 50px;
+            border-radius: 30%;
+            text-align: center;
+            line-height: 50px;
+            font-size: 30px;
+            text-decoration: none;
+            z-index: 999;
+        }
+        .back-button:hover {
+            transform: scale(1.1);
+        }
+     /* Add this CSS block to position the text to the right side of the image */
+.modal-content {
+    position: relative; /* Set position to relative */
+    display: flex; /* Use flexbox for layout */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+}
+
+.modal-text {
+    color: #ffffff;
+    font-size: 18px;
+    margin-left: 150px; /* Add left margin for spacing */
+    margin-top: -300px;
+}
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <img src="headerlogo.png" alt="Website Logo">
+        <img src="sidebarbut.png" class="sidebar-button" alt="Sidebar" onclick="openNav()">
+    </header>
+    <div>
+        <a href="index.html" class="back-button" onclick="openNav()">
+            <img src="back.png" alt="Back" style="width: 60px; height: 60px;">
+        </a>
+    </div>
+
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="index.html">Home</a>
+        <a href="#" onclick="openWindow('aboutWindow')">About</a>
+        <a href="#" onclick="openWindow('contactWindow')">Contact</a>
+        <a href="#" onclick="openWindow('membersWindow')">Members</a>
+    </div>
+
+    <div id="aboutWindow" class="floating-window">
+        <button class="close-button" onclick="closeWindow('aboutWindow')">×</button>
+        <h1 style="text-align: center;">About Us</h1>
+        <p style="text-align: center;">Welcome to REGgin, your online art gallery showcasing digital artworks.</p>
+        <p style="text-align: center;">Thank you for being part of our artistic journey at REGgin!.</p>
+    </div>
+
+    <div id="contactWindow" class="floating-window">
+        <button class="close-button" onclick="closeWindow('contactWindow')">×</button>
+        <h1 style="text-align: center;">Contact Us</h1>
+        <p style="text-align: center;">maryjoysept20@gmail.com</p>
+        <p style="text-align: center;">joshuabalderrama88@gmail.com</p>
+    </div>
+
+    <div id="membersWindow" class="floating-window">
+        <button class="close-button" onclick="closeWindow('membersWindow')">×</button>
+        <h1 style="text-align: center;">Members</h1>
+        <p style="text-align: center;">Septimo, Mary Joy C.</p>
+        <p style="text-align: center;">Balderrama, Joshua R.</p>
+    </div>
+
+    <div id="imageContainer"></div>
+
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <p id="modalText" class="modal-text"></p>
+    </div>
+    <div class="overlay" onclick="closeAll()"></div>
+
+    <script>
+        var currentWindow = null;
+
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+        }
+
+        function openWindow(windowId) {
+            if (currentWindow !== null) {
+                document.getElementById(currentWindow).style.display = "none";
+            }
+            document.getElementById(windowId).style.display = "block";
+            currentWindow = windowId;
+        }
+
+        function closeWindow(windowId) {
+            document.getElementById(windowId).style.display = "none";
+            currentWindow = null;
+        }
+  // // Array of image URLs
+        // var imageUrls = [
+        //     "cat.png",
+        //     "Innocent.png",
+        //     "knight1.png",
+        //     "red.png",
+        //     "Megumin.png",
+        //     "eren.png",
+        //     "adknkd.png",
+        //     "Random.png",
+        //     "spotvmiles.png",
+        //     "Untitled2.png",
+        //     "girl.png",
+        //     "Untitled8.png",
+        //     "lizrd.png",
+        //     "Aisha - Copy.png",
+        //     "girlwithcat.png",
+        //     "mage.jpg",
+        //     "Flame Lord.png",
+        //     "dazai.png",
+        //     "redhood.png",
+        //     "Hatsune.png",
+        //     "green.png",
+        //     "Howl.png",
+        //     "teamrocket.png",
+        //     "Ibu-chan final.png",
+        //     "todo.png",
+        //     "1.jpg",
+        //     "lol (2).png",
+        //     "yelloow.png",
+        //     "kemokemo.png",
+        //     "luffy.png"
+        //     // Add more image URLs as needed
+        // ];
+
+        var imagesData = [
+            { url: "cat.png", info: "TITLE: Coffee Cat\nATIST: Balderrama Joshua R." },
+            { url: "Innocent.png", info: "TITLE: Innocent\nATIST: Septimo Mary Joy C." },
+            { url: "knight1.png", info: "TITLE: Knight\nATIST: Balderrama Joshua R." },
+            { url: "red.png", info: "TITLE: Red\nATIST: Balderrama Joshua R." },
+            { url: "Megumin.png", info: "TITLE: Megumin\nATIST: Septimo Mary Joy C." },
+            { url: "eren.png", info: "TITLE: Titan\nATIST: Balderrama Joshua R." },
+            { url: "adknkd.png", info: "TITLE: Black\nATIST: Balderrama Joshua R." },
+            { url: "Random.png", info: "TITLE: Random\nATIST: Septimo Mary Joy C." },
+            { url: "spotvmiles.PNG", info:"TITLE: SpotvMiles\nATIST: Balderrama Joshua R." },
+            { url: "Untitled2.png", info: "TITLE: Xmas\nATIST: Septimo Mary Joy C." },
+            { url: "girl.png", info: "TITLE: Not a Moon Light\nATIST: Balderrama Joshua R." },
+            { url: "Untitled8.png", info: "TITLE: Sky\nATIST: Septimo Mary Joy C." },
+            { url: "lizrd.png", info: "TITLE: Lizard\nATIST: Balderrama Joshua R." },
+            { url: "Aisha - Copy.png", info: "TITLE: Aisha\nATIST: Septimo Mary Joy C." },
+            { url: "girlwithcat.png", info: "TITLE: Girl with Cat\nATIST: Balderrama Joshua R."},
+            { url: "mage.jpg", info:"TITLE: Mage\nATIST: Septimo Mary Joy C." },
+            { url: "Flame Lord.png", info: "TITLE: Flame Lord\nATIST: Septimo Mary Joy C." },
+            { url: "dazai.png", info:"TITLE: Cancel\nATIST: Balderrama Joshua R." },
+            { url: "redhood.png", info: "TITLE: Red Hood\nATIST: Balderrama Joshua R." },
+            { url: "Hatsune.png", info:"TITLE: Hatsune\nATIST: Septimo Mary Joy C."},
+            { url: "green.png", info: "TITLE: Green\nATIST: Balderrama Joshua R." },
+            { url: "Howl.png", info: "TITLE: Howl\nATIST: Septimo Mary Joy C." },
+            { url: "teamrocket.png", info: "TITLE: Team Rocket\nATIST: Balderrama Joshua R." },
+            { url: "Ibu-chan final.png", info: "TITLE: Ibu-chan\nATIST: Septimo Mary Joy C." },
+            { url: "todo.png", info: "TITLE: Fire\nATIST: Balderrama Joshua R." },
+            { url: "1.jpg", info: "TITLE: Blood\nATIST: Balderrama Joshua R."},
+            { url: "lol (2).png", info: "TITLE: Stare\nATIST: Septimo Mary Joy C." },
+            { url: "yelloow.png", info: "TITLE: Yellow\nATIST: Balderrama Joshua R." },
+            { url: "kemokemo.png", info: "TITLE: Kemokemo\nATIST: Septimo Mary Joy C." },
+            { url: "luffy.png", info:"TITLE: King\nATIST: Balderrama Joshua R." },
+            
+            // Add more image URLs and information as needed
+        ];
+
+        var container = document.getElementById("imageContainer");
+
+        imagesData.forEach(function(data) {
+            var img = document.createElement("img");
+            img.src = data.url;
+            img.alt = "Image";
+            img.className = "custom-image";
+            container.appendChild(img);
+
+            img.addEventListener('click', function() {
+                var modal = document.getElementById("myModal");
+                var modalImg = document.getElementById("modalImage");
+                var modalText = document.getElementById("modalText");
+
+                modalImg.src = this.src;
+
+                var imageData = imagesData.find(function(item) {
+                    return item.url === data.url;
+                });
+                if (imageData) {
+                    modalText.innerText = imageData.info;
+                }
+
+                modal.style.display = "block";
+            });
+        });
+
+        var closeBtn = document.getElementsByClassName("close")[0];
+
+        closeBtn.onclick = function() {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            var modal = document.getElementById("myModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        function closeAll() {
+            var modal = document.getElementById("myModal");
+            var floatingWindows = document.querySelectorAll(".floating-window");
+            var overlay = document.querySelector(".overlay");
+
+            modal.style.display = "none";
+            floatingWindows.forEach(function(window) {
+                window.style.display = "none";
+            });
+            overlay.style.display = "none";
+            currentWindow = null;
+        }
+    </script>
+</body>
+</html>
+<!-- 
+
+      
+         -->

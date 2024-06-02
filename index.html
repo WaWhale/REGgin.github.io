@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGgin</title>
+    <style>
+        body {
+            background-image: url('bg.png');
+            background-size: cover; /* Adjusts the image to cover the entire background */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+        header {
+            background-color: #151515;
+            color: #fff;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Positions elements at both ends */
+        }
+        header img {
+            max-width: 200px;
+            margin-right: 10px;
+            height: auto;
+        }
+        .sidebar-button {
+            cursor: pointer; /* Makes the image act like a button */
+            width: 40px; /* Adjust the width as needed */
+            height: auto; /* Maintains the aspect ratio */
+        }
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            right: 0;
+            background-color: #111111db;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+        .sidebar-button:hover {
+            transform: scale(1.1); /* Increases the size slightly on hover */
+        }
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #5ef439;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            color: #ffffff;
+        }
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+        .styled-button {
+            position: absolute; /* Position the button relative to the document */
+            top: 84%; /* Position the button 50% from the top of the document */
+            left: 63%; /* Position the button 50% from the left of the document */
+            display: inline-block;
+            padding: 20px 40px;
+            font-size: 40px;
+            background-color: #5ef439; /* Green background */
+            color: #161616;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none; /* Remove default underline style for anchor tags */
+            transition: background-color 0.3s; /* Smooth transition on hover */
+            /* animation: floatAnimation 1s infinite alternate; */
+        
+        }
+
+        /* Change background color on hover */
+        .styled-button:hover {
+            
+            /* transform: translateY(-5px); */
+            transform: scale(1.1);
+        }
+
+        /* Floating window style */
+        .floating-window {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1f1f1f;
+            padding: 30px; /* Adjust padding as needed */
+            box-shadow: 0px 0px 10px rgba(2, 255, 19, 0.182);
+            z-index: 9999;
+            display: none;
+            width: 500px; /* Adjust width as needed */
+            height: 300px;
+            max-width: 90%; /* Set a maximum width */
+            max-height: 90%; /* Set a maximum height */
+            overflow: auto; /* Add scrollbars if content exceeds window size */
+            border-radius: 10px; /* Add border radius for rounded corners */
+            color: #3def34; /* Change text color to white */
+        }
+
+        /* Close button style */
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            color: #fff;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        @keyframes floatAnimation {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <img src="headerlogo.png" alt="Website Logo">
+        <img src="sidebarbut.png" class="sidebar-button" alt="Sidebar" onclick="openNav()">
+    </header>
+
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="#" onclick="openWindow('aboutWindow')">About</a>
+        <a href="#" onclick="openWindow('contactWindow')">Contact</a>
+        <a href="#" onclick="openWindow('membersWindow')">Members</a>
+    </div>
+
+    <!-- Floating windows -->
+    <div id="aboutWindow" class="floating-window">
+        <button class="close-button" onclick="closeWindow('aboutWindow')">×</button>
+        <h1 style="text-align: center;">About Us</h1>
+        <p style="text-align: center;">Welcome to REGgin, your online art gallery showcasing digital artworks.</p>
+       <p style="text-align: center;"> Thank you for being part of our artistic journey at REGgin!.</p>
+    </div>
+
+    <div id="contactWindow" class="floating-window">
+        <button class="close-button" onclick="closeWindow('contactWindow')">×</button>
+        <h1 style="text-align: center;">Contact Us</h1>
+        <p style="text-align: center;">maryjoysept20@gmail.com</p>
+        <p style="text-align: center;">joshuabalderrama88@gmail.com</p>
+        
+    </div>
+
+    <div id="membersWindow" class="floating-window">
+        <button class="close-button" onclick="closeWindow('membersWindow')">×</button>
+        <h1 style="text-align: center;">Members</h1>
+        <p style="text-align: center;">Septimo, Mary Joy C.</p>
+        <p style="text-align: center;">Balderrama, Joshua R.</p>
+       
+    </div>
+
+    <script>
+        // Keep track of the currently open window
+        var currentWindow = null;
+
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+        }
+
+        // Function to open floating window
+        function openWindow(windowId) {
+            // Close the current window if one is open
+            if (currentWindow !== null) {
+                document.getElementById(currentWindow).style.display = "none";
+            }
+
+            // Open the new window
+            document.getElementById(windowId).style.display = "block";
+
+            // Update the current window variable
+            currentWindow = windowId;
+        }
+
+        // Function to close floating window
+        function closeWindow(windowId) {
+            document.getElementById(windowId).style.display = "none";
+            // Reset the current window variable
+            currentWindow = null;
+        }
+    </script>
+
+    <a href="explorepage.html" class="styled-button">Explore</a>
+</body>
+</html>
